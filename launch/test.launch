@@ -5,19 +5,20 @@
   <arg name="use_neonavigation" default="false" />
   <arg name="use_pointcloud_map" default="true" />
   <arg name="use_cad_map" default="false" if="$(arg use_pointcloud_map)" />
-  <arg name="use_cad_map" default="true" unless="$(arg use_pointcloud_map)" />
   <arg name="map_objs" unless="$(arg use_pointcloud_map)" />
   <arg name="map_pcd" if="$(arg use_pointcloud_map)" />
   <arg name="map_scale" default="1.0" />
   <arg name="map_offset_x" default="0.0" />
   <arg name="map_offset_y" default="0.0" />
   <arg name="generate_test_bag" default="false" />
-  <arg name="use_bag_file" default="false" />
+  <arg name="use_bag_file" default="true" />
   <arg name="bag_file" if="$(arg use_bag_file)" />
 
   <param name="/use_sim_time" value="true" if="$(arg use_bag_file)" />
   <node pkg="rosbag" type="play" name="playback" args="--clock $(arg bag_file)"
-      if="$(arg use_bag_file)">
+      if="$(arg use_bag_file)" >
+    <remap from="imu" to="imu/data" />
+    <remap from="velodyne_points" to="cloud" />
     <remap from="odom" to="odom_unused" if="$(arg without_odom)" />
     <remap from="imu/data" to="imu/data_unused" if="$(arg without_imu)" />
   </node>
@@ -29,6 +30,7 @@
   <arg name="config_file" default="$(find mcl_3dl)/config/test_localization_noimu.yaml"
       if="$(arg without_imu)" />
   <rosparam command="load" file="$(arg config_file)"/>
+
 
   <!--
   Required topics
@@ -47,7 +49,7 @@
     <param name="offset_x" value="$(arg map_offset_x)" />
     <param name="offset_y" value="$(arg map_offset_y)" />
     <param name="scale" value="$(arg map_scale)" />
-    <remap from="~/cloud" to="mapcloud" />
+    <remap from="cloud" to="mapcloud" />
   </node>
   <node pkg="pcl_ros" type="pcd_to_pointcloud" name="pcd_to_pointcloud"
       args="$(arg map_pcd)" if="$(arg use_pointcloud_map)">

@@ -40,6 +40,9 @@ set(CMAKE_CXX_STANDARD_REQUIRED ON)
 include_directories(include ${catkin_INCLUDE_DIRS} ${EIGEN3_INCLUDE_DIR} ${Boost_INCLUDE_DIRS} ${PCL_INCLUDE_DIR})
 add_definitions(${PCL_DEFINITIONS})
 
+add_executable(initial_pose src/initial_pose.cpp)
+target_link_libraries(initial_pose ${catkin_LIBRARIES})
+
 
 # Workaround for debian stretch build (https://bugs.debian.org/cgi-bin/bugreport.cgi?bug=894656)
 list(REMOVE_ITEM PCL_LIBRARIES

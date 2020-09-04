@@ -1,15 +1,30 @@
 mcl_3dl:
   map_frame: "map"
   accum_cloud: 2
-  lpf_step: 1.0
-  dist_weight_z: 2.0
+  map_downsample_x: 0.1
+  map_downsample_y: 0.1
+  map_downsample_z: 0.1
+  lpf_step: 0.0
+  dist_weight_x: 0.1 #距離の重み #ポイントのマッチング数に関係有りそう
+  dist_weight_y: 0.1
+  dist_weight_z: 0.1
+  num_particles: 256
+
   likelihood:
-    match_dist_min: 0.5
-    match_output_dist: 0.3
+    match_weight: 5
+    match_dist_min: 0.1
+    match_output_dist: 0.1
+    match_dist_flat: 0.05
+    clip_far: 100.0
+    clip_near: 0.1
+    clip_z_max: 4
+
 obj_to_pointcloud:
   frame_id: "map"
   points_per_meter_sq: 1200.0
-  downsample_grid: 0.1
+  downsample_grid: 0.1 #Not relevant
+
 pcd_to_pointcloud:
   frame_id: "map"
   latch: true
+  downsample_grid: 1
